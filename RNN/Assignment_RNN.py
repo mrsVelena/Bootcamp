@@ -108,18 +108,16 @@ from sklearn.model_selection import GridSearchCV
 
 def build_classifier(optimizer):
     classifier = Sequential()
-    classifier.add(LSTM(units = 50, return_sequences = True, input_shape = (60, 1)))
-    classifier.add(LSTM(units = 50, return_sequences = True))
-    classifier.add(LSTM(units = 50, return_sequences = True))
-    classifier.add(LSTM(units = 50))
+    classifier.add(LSTM(units = 10, return_sequences = True, input_shape = (60, 1)))
+    classifier.add(LSTM(units = 10, return_sequences = True))
+    classifier.add(LSTM(units = 10, return_sequences = True))
+    classifier.add(LSTM(units = 10))
     classifier.add(Dense(units = 1))
-    classifier.compile(optimizer = 'adam', loss = 'mean_squared_error', metrics=[rmse, 'accuracy'])
+    classifier.compile(optimizer = optimizer, loss = 'mean_squared_error', metrics=[rmse, 'accuracy'])
     return classifier
 
 classifier = KerasClassifier(build_fn = build_classifier)
-parameters = {'batch_size': [25, 32],
-              'epochs': [100, 500],
-              'optimizer': ['adam', 'rmsprop']}
+parameters = {'optimizer': ['adam', 'rmsprop']}
 grid_search = GridSearchCV(estimator = classifier,
                            param_grid = parameters,
                            cv = 3)
